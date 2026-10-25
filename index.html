@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>José Junior · Portfólio</title>
+<meta name="description" content="José Francisco Gonçalves Junior. Engenharia de Instrumentação, Automação e Robótica (UFABC). CAD 3D, sistemas embarcados e simulação física.">
+<meta id="tema" name="theme-color" content="#0f0f0f">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+:root {
+  --a: #FF8A7A;              /* cor dominante (varia sozinha entre tons de salmão) */
+  --b: #FFB38A;              /* segundo tom, vizinho do dominante */
+  --bg: #0f0f0f;
+  --surf: #1a1a1a;
+  --surf2: #272727;
+  --txt: #f1f1f1;
+  --mut: #aaaaaa;
+  --line: #2b2b2b;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--txt);
+  font: 15px/1.55 Roboto, "Segoe UI", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {   /* brilho sutil da cor dominante no topo */
+  content: ""; position: fixed; inset: 0 0 auto 0; height: 420px; pointer-events: none; z-index: -1;
+  background: radial-gradient(700px 300px at 20% 0, color-mix(in srgb, var(--a) 16%, transparent), transparent 70%);
+}
+a { color: inherit; text-decoration: none; }
+.wrap { width: min(1280px, 100% - 40px); margin: 0 auto; }
+
+/* ---------- Flor ---------- */
+.flor {
+  --f1: var(--a); --f2: #FFFFFF; --flor-fundo: var(--bg);
+  width: 32px; height: 32px; display: inline-block; overflow: visible; flex: none;
+  transition: transform 1.6s cubic-bezier(.22,.6,.2,1);
+}
+.flor .pt { fill: var(--f1); stroke: var(--flor-fundo); stroke-width: .9; stroke-linejoin: round; }
+.flor .in { transform-box: fill-box; transform-origin: center; animation: respira 9s ease-in-out infinite; }
+.flor .in .pt { fill: var(--f2); fill-opacity: .34; stroke: none; }
+.flor .ct { fill: var(--f2); }
+@keyframes respira { 0%,100% { transform: scale(1) rotate(0); } 50% { transform: scale(1.07) rotate(8deg); } }
+@media (prefers-reduced-motion: reduce) { .flor, .flor .in, .card.enter { animation: none; transition: none; } html { scroll-behavior: auto; } }
+
+/* ---------- Barra superior ---------- */
+header.top { position: sticky; top: 0; z-index: 10; background: rgba(15,15,15,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+header.top .wrap { height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; letter-spacing: -.01em; }
+.top nav { display: flex; gap: 8px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 999px; border: 0; cursor: pointer;
+  background: var(--surf2); color: var(--txt); font: inherit; font-size: .9rem; font-weight: 500; transition: background .2s;
+}
+.pill:hover { background: #3a3a3a; }
+.pill.main { background: var(--a); color: #111; font-weight: 600; transition: filter .2s; }
+.pill.main:hover { filter: brightness(1.08); background: var(--a); }
+
+/* ---------- Cabeçalho do canal ---------- */
+.canal { padding: 40px 0 8px; display: flex; gap: 28px; align-items: center; }
+.canal h1 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -.02em; line-height: 1.1; }
+.canal .nome { margin: 6px 0 4px; font-size: 1.05rem; font-weight: 500; }
+.canal .nome .a { color: var(--a); font-weight: 700; }
+.canal .nome .b { color: var(--b); font-weight: 700; }
+.canal .sub { margin: 0 0 14px; color: var(--mut); max-width: 760px; }
+.canal .acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- Chips ---------- */
+.chips { display: flex; gap: 10px; overflow-x: auto; padding: 22px 0 18px; scrollbar-width: none; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; padding: 7px 14px; border-radius: 8px; border: 0; background: var(--surf2); color: var(--txt); font: inherit; font-size: .9rem; font-weight: 500; cursor: pointer; transition: background .2s, color .2s; }
+.chip:hover { background: #3a3a3a; }
+.chip[aria-selected="true"] { background: var(--txt); color: #0f0f0f; }
+
+/* ---------- Página do projeto (estilo "assistir") ---------- */
+.watch { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start; }
+.player { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; border: 1px solid var(--line); }
+.player img, .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* imagem clicável + indicação de clique */
+a.player { display: block; color: inherit; cursor: pointer; }
+a.player img { transition: transform .6s cubic-bezier(.22,.6,.2,1); }
+a.player:hover img { transform: scale(1.025); }
+a.player:focus-visible { outline: 2px solid var(--a); outline-offset: 3px; }
+.dica {
+  position: absolute; right: 14px; bottom: 14px; z-index: 2; pointer-events: none;
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px;
+  background: rgba(15,15,15,.72); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.14); color: var(--txt);
+  font-size: .82rem; font-weight: 500; letter-spacing: .01em; line-height: 1;
+  transition: background .25s, color .25s, border-color .25s;
+}
+.dica svg { width: 14px; height: 14px; flex: none; transition: transform .25s; }
+a.player:hover .dica, a.player:focus-visible .dica { background: var(--a); color: #111; border-color: transparent; }
+a.player:hover .dica svg, a.player:focus-visible .dica svg { transform: translate(2px, -2px); }
+@media (prefers-reduced-motion: reduce) { a.player img, .dica, .dica svg { transition: none; } a.player:hover img { transform: none; } }
+.ph { position: absolute; inset: 0; display: none; place-items: center; text-align: center; padding: 16px; color: var(--mut); font-size: .8rem; background: repeating-linear-gradient(45deg, #111 0 14px, #151515 14px 28px); }
+.sem-img .ph { display: grid; }
+.card.enter { animation: entra .5s cubic-bezier(.22,.6,.2,1); }
+@keyframes entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.detalhe h2 { margin: 18px 0 10px; font-size: clamp(1.25rem, 2.6vw, 1.6rem); line-height: 1.3; letter-spacing: -.01em; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.tag { font-size: .8rem; padding: 4px 12px; border-radius: 999px; background: var(--surf2); color: #d6d6d6; }
+.desc { background: var(--surf); border-radius: 14px; padding: 16px 18px; color: #dcdcdc; margin: 0 0 16px; }
+.desc b { color: var(--a); font-weight: 600; }
+
+/* ---------- Lateral: próximos projetos ---------- */
+.lado h3 { margin: 0 0 12px; font-size: 1rem; font-weight: 600; }
+.item { display: grid; grid-template-columns: 168px 1fr; gap: 12px; width: 100%; padding: 6px; margin: 0 -6px 6px; border: 0; background: none; color: inherit; text-align: left; font: inherit; cursor: pointer; border-radius: 12px; transition: background .2s; }
+.item:hover { background: var(--surf); }
+.item.ativo { background: var(--surf2); }
+.thumb { position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background: #000; }
+.thumb .ph { font-size: .62rem; padding: 6px; }
+.item strong { display: block; font-size: .93rem; line-height: 1.3; font-weight: 600; margin-bottom: 4px; }
+.item span { color: var(--mut); font-size: .8rem; }
+@media (max-width: 1000px) { .watch { grid-template-columns: 1fr; } .lado { order: 2; } }
+@media (max-width: 480px) { .item { grid-template-columns: 128px 1fr; } }
+
+/* ---------- Contato / rodapé ---------- */
+#contato { padding: 56px 0 8px; margin-top: 40px; border-top: 1px solid var(--line); scroll-margin-top: 70px; }
+#contato h2 { margin: 0 0 6px; font-size: 1.3rem; }
+#contato p { margin: 0 0 16px; color: var(--mut); }
+footer { padding: 32px 0 44px; color: var(--mut); font-size: .85rem; }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+/* ---------- Celular e toque ---------- */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { overflow-x: clip; -webkit-tap-highlight-color: transparent; }
+button, .pill, .chip, .item { touch-action: manipulation; }
+header.top { padding-top: env(safe-area-inset-top); }
+footer { padding-bottom: calc(44px + env(safe-area-inset-bottom)); }
+#principal { scroll-margin-top: 68px; }
+.canal h1, .detalhe h2, .desc, .nome { overflow-wrap: break-word; }
+.pill:active, .chip:active, .item:active { transform: scale(.97); }
+@media (hover: none) {
+  .pill:hover { background: var(--surf2); }
+  .pill.main:hover { background: var(--a); filter: none; }
+  .chip:hover { background: var(--surf2); }
+  .chip[aria-selected="true"]:hover { background: var(--txt); }
+  .item:hover { background: none; }
+  .item.ativo:hover { background: var(--surf2); }
+}
+@media (max-width: 640px) {
+  .wrap { width: calc(100% - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)); }
+  header.top .wrap { height: 54px; }
+  .brand { font-size: 1rem; gap: 8px; }
+  .top nav { gap: 6px; }
+  .top .pill { padding: 8px 14px; font-size: .85rem; }
+  .canal { padding: 28px 0 4px; }
+  .canal .nome { font-size: 1rem; }
+  .canal .sub { font-size: .92rem; }
+  .canal .acoes .pill { flex: 1; justify-content: center; min-height: 46px; }
+  .chips { margin: 0 -16px 18px; padding: 18px 16px 14px; scroll-snap-type: x proximity; }
+  .chip { padding: 11px 16px; scroll-snap-align: start; }
+  .player { border-radius: 12px; }
+  .dica { right: 10px; bottom: 10px; padding: 7px 12px; font-size: .78rem; }
+  .detalhe h2 { margin-top: 14px; }
+  .desc { padding: 14px 16px; font-size: .95rem; }
+  .item { margin: 0 0 4px; align-items: center; }
+  #contato { padding-top: 40px; margin-top: 28px; }
+  #contato .pill { width: 100%; justify-content: center; min-height: 48px; }
+  footer .wrap { flex-direction: column; }
+}
+@media (max-width: 400px) {
+  .top nav a[href="#contato"] { display: none; }   /* telas bem estreitas: o contato já está no topo da página */
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a href="#topo" class="brand" aria-label="José Junior">
+      <svg class="flor" id="logo" viewBox="0 0 64 64" role="img" aria-label="Logo flor"></svg>
+      José Junior
+    </a>
+    <nav>
+      <a class="pill" href="#contato">Contato</a>
+      <a class="pill main" data-link="linkedin" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+  </div>
+</header>
+
+<main id="topo" class="wrap">
+  <!-- ===================== CABEÇALHO ===================== -->
+  <section class="canal">
+    <div>
+      <h1>José Junior</h1>
+      <div class="nome"><span class="a">José</span> Francisco Gonçalves <span class="b">Junior</span></div>
+      <p class="sub">Engenharia de Instrumentação, Automação e Robótica (UFABC) | CAD 3D, Sistemas Embarcados &amp; Simulação Física</p>
+      <div class="acoes">
+        <a class="pill main" data-link="linkedin" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="pill" data-link="email">E-mail</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROJETOS ===================== -->
+  <div class="chips" id="chips" role="tablist" aria-label="Projetos"></div>
+
+  <section class="watch" id="projetos">
+    <article class="card" id="principal" role="tabpanel" aria-live="polite"></article>
+    <aside class="lado">
+      <h3>Projetos</h3>
+      <div id="lista"></div>
+    </aside>
+  </section>
+
+  <!-- ===================== CONTATO ===================== -->
+  <section id="contato">
+    <h2>Contato</h2>
+    <p>Projetos, estágio ou colaboração: fale comigo.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="pill main" data-link="email">jun9nho@gmail.com</a>
+      <a class="pill" data-link="linkedin" target="_blank" rel="noopener">linkedin.com/in/jfgonjr</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>José Francisco Gonçalves Junior</span>
+    <span>Graduação em Engenharia de Instrumentação, Automação e Robótica · UFABC</span>
+  </div>
+</footer>
+
+<script>
+/* ===================== CONTATOS ===================== */
+const CONFIG = {
+  email:    'jun9nho@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/jfgonjr'
+};
+
+/* ===================== PROJETOS =====================
+   Para adicionar um projeto extra, copie o bloco comentado no fim da lista. */
+const PROJETOS = [
+  {
+    id: 'divina-b3', curto: 'Divina B3', img: 'img/divina-b3.jpg',
+    titulo: 'Divina B3 — AI Copilot Anti-Tilt para Day Traders',
+    desc: 'Simulador de mercado financeiro (B3) que protege o trader de si mesmo. O módulo Anti-Tilt calcula em tempo real um score de risco emocional por soma ponderada de 4 sinais auditáveis (overtrading, aumento de lote após perda, perdas seguidas e ordens fora do plano), aciona uma trava de 15 minutos na boleta e mostra quanto o tilt custou. Inclui Whale Watcher (fluxo institucional), tradutor de estratégias com backtest, calculadora de IR pré-trade, cripto e patrimônio, além de tour guiado e modo didático. Lógica de negócio em funções puras com testes; dados 100% simulados e declarados como tal.',
+    tags: ['React', 'Vite', 'Tailwind', 'Recharts', 'Finanças Comportamentais'],
+    link: 'https://divinab3.vercel.app/'   // CONFIRA este link
+  },
+  {
+    id: 'divina-s58', curto: 'Divina S58', img: 'img/divina-s58.jpg',
+    titulo: 'Divina S58 — Equal Length V12-Sound Exhaust System',
+    desc: 'Sistema de exaustão acústico de alta performance projetado em CAD para motores BMW S58 (M3 G80 / M4 G82). Apresenta simulação física e equalização de tubos (+330 mm de loop no Banco 1) para emular o ronco de um motor V12, ressonadores Helmholtz anti-drone de 204 Hz, visualizador 3D CAD interativo em 360° e espectrograma harmônico.',
+    tags: ['CAD 3D', 'Simulação Acústica', 'WebGL', 'Síntese Física', 'Titânio Grade 2'],
+    link: 'https://divinaperfomances58.vercel.app/'
+  },
+  {
+    id: 'divina-wheel', curto: 'Divina Wheel', img: 'img/divina-wheel.jpg',
+    titulo: 'Divina Wheel — Rodas Forjadas de Alta Performance',
+    desc: 'Configurador 3D interativo WebGL para rodas forjadas em alumínio usinado a partir de bloco único e inserções de fibra de carbono em trama twill 2x2. Permite personalização em tempo real de aros (18″ e 16″), furações (5x112 / 4x100), concavidade de face e emblema floral no cubo.',
+    tags: ['WebGL 3D', 'Design de Produto', 'CAD 3D', 'Usinagem CNC', 'Fibra de Carbono'],
+    link: 'https://divinawheel.vercel.app/'   // CONFIRA este link
+  },
+  {
+    id: 'sepia', curto: 'Sepia', img: 'img/sepia.jpg',
+    titulo: 'Sepia — Válvula Borboleta Inteligente & Controlador de Fluido Ø10 mm',
+    desc: 'Plataforma interativa com gêmeo digital 3D e simulador de firmware em tempo real para válvula borboleta inteligente de Ø10 mm. Conta com 4 módulos de atuação (Purga Anti-Gelo, Corte de Gás de Emergência, Damper de CO₂ e Controlador de Vazamento de Água), modelo 3D explodido dos STLs e simulação dos sinais da placa eletrônica (Arduino/ESP32 e encoder AS5600).',
+    tags: ['Sistemas Embarcados', 'C/C++', 'Gêmeo Digital 3D', 'Arduino / ESP32', 'Sensores'],
+    link: 'https://teste5-phi.vercel.app/'
+  }
+  /* ---- PROJETO EXTRA: descomente, coloque uma vírgula depois do bloco acima e edite ----
+  ,{
+    id: 'extra-1', curto: '[NOME_DO_PROJETO_EXTRA]', img: 'img/extra-1.jpg',
+    titulo: '[NOME_DO_PROJETO_EXTRA]',
+    desc: '[INSIRA AQUI A BREVE EXPLICAÇÃO DO PROJETO EXTRA]',
+    tags: ['[Tag 1]', '[Tag 2]', '[Tag 3]'],
+    link: '#'
+  }
+  ------------------------------------------------------------------------------ */
+];
+
+/* ===================== FLOR ===================== */
+const PETALA = 'M32 33C23 29 20 17 27 9.5C29.5 7 34.5 7 37 9.5C44 17 41 29 32 33Z';
+function desenhaFlor(svg) {
+  let s = '';
+  for (let r = 0; r < 360; r += 60) s += '<path class="pt" d="' + PETALA + '" transform="rotate(' + r + ' 32 32)"/>';
+  s += '<g class="in">';
+  for (let r = 30; r < 360; r += 60) s += '<path class="pt" d="' + PETALA + '" transform="rotate(' + r + ' 32 32) translate(32 32) scale(.6) translate(-32 -32)"/>';
+  svg.innerHTML = s + '</g><circle class="ct" cx="32" cy="32" r="5.2"/>';
+}
+const logos = ['logo'].map(id => document.getElementById(id));
+logos.forEach(desenhaFlor);
+let giro = 0;
+const gira = () => { giro += 60; logos.forEach(l => l.style.transform = 'rotate(' + giro + 'deg)'); };
+
+/* ===================== COR DOMINANTE (varia entre tons de salmão) ===================== */
+const lin = v => { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+const gam = v => Math.round(255 * Math.min(1, Math.max(0, v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055)));
+function toLab(hex) {
+  const n = parseInt(hex.slice(1), 16), r = lin(n >> 16 & 255), g = lin(n >> 8 & 255), b = lin(n & 255);
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s];
+}
+function fromLab(c) {
+  const l = Math.pow(c[0] + 0.3963377774 * c[1] + 0.2158037573 * c[2], 3);
+  const m = Math.pow(c[0] - 0.1055613458 * c[1] - 0.0638541728 * c[2], 3);
+  const s = Math.pow(c[0] - 0.0894841775 * c[1] - 1.291485548 * c[2], 3);
+  return 'rgb(' + gam(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s) + ',' + gam(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s) + ',' + gam(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s) + ')';
+}
+/* Cada par: [dominante, vizinho]. Todos na família do salmão. */
+const PALETA = [
+  ['#FF8A7A', '#FFB38A'],   // salmão → pêssego
+  ['#FF7F8E', '#FF9A7A'],   // salmão rosado → salmão
+  ['#FF6B5A', '#FF8A7A'],   // coral → salmão
+  ['#F79A7C', '#FFC09A'],   // salmão queimado → damasco
+  ['#FF9488', '#FF7F96'],   // salmão claro → rosa salmão
+  ['#FFA27A', '#FF7A6A']    // salmão alaranjado → coral
+];
+const raiz = document.documentElement.style;
+const tema = document.getElementById('tema');
+const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let atual = PALETA[0].map(toLab), idxCor = 0;
+function pinta() {
+  raiz.setProperty('--a', fromLab(atual[0]));
+  raiz.setProperty('--b', fromLab(atual[1]));
+}
+function proximaCor() {
+  idxCor = (idxCor + 1) % PALETA.length;
+  const alvo = PALETA[idxCor].map(toLab), ini = atual.map(c => c.slice()), t0 = performance.now(), dur = 4000;
+  const passo = agora => {
+    const k = Math.min(1, (agora - t0) / dur), e = 0.5 - 0.5 * Math.cos(Math.PI * k);
+    atual = ini.map((c, i) => c.map((v, j) => v + (alvo[i][j] - v) * e));
+    pinta();
+    if (k < 1) requestAnimationFrame(passo);
+  };
+  requestAnimationFrame(passo);
+}
+if (!reduzir) setInterval(() => { if (!document.hidden) proximaCor(); }, 8000);   // pausa com a aba em segundo plano (poupa bateria)
+
+/* ===================== PROJETOS (render + troca) ===================== */
+const chips = document.getElementById('chips');
+const principal = document.getElementById('principal');
+const lista = document.getElementById('lista');
+let ativoId = null;
+
+function imagem(p, alt) {
+  return '<img src="' + p.img + '" alt="' + alt + '" loading="lazy"><div class="ph">Coloque a imagem em <b>' + p.img + '</b></div>';
+}
+function render(id, girar) {
+  const p = PROJETOS.find(x => x.id === id) || PROJETOS[0];
+  ativoId = p.id;
+  chips.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-selected', String(c.dataset.id === p.id)));
+  if (girar) { const sel = chips.querySelector('[aria-selected="true"]'); if (sel) sel.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }); }
+  principal.innerHTML =
+    '<a class="player" href="' + p.link + '" target="_blank" rel="noopener" aria-label="Abrir o projeto ' + p.curto + ' em uma nova aba">' + imagem(p, p.titulo) +
+    '<span class="dica">Clique para ver mais <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>' +
+    '<div class="detalhe"><h2>' + p.titulo + '</h2>' +
+    '<div class="tags">' + p.tags.map(t => '<span class="tag">' + t + '</span>').join('') + '</div>' +
+    '<p class="desc">' + p.desc + '</p></div>';
+  principal.classList.remove('enter'); void principal.offsetWidth; principal.classList.add('enter');
+  lista.querySelectorAll('.item').forEach(i => i.classList.toggle('ativo', i.dataset.id === p.id));
+  principal.querySelectorAll('.player').forEach(semImg);
+  document.title = p.curto + ' · José Junior';
+  if (girar) gira();
+}
+function semImg(box) {
+  const img = box.querySelector('img');
+  const falha = () => box.classList.add('sem-img');
+  img.addEventListener('error', falha);
+  if (img.complete && img.naturalWidth === 0) falha();
+}
+PROJETOS.forEach((p, i) => {
+  const chip = document.createElement('button');
+  chip.className = 'chip'; chip.role = 'tab'; chip.dataset.id = p.id; chip.textContent = p.curto;
+  chip.onclick = () => troca(p.id);
+  chips.appendChild(chip);
+
+  const item = document.createElement('button');
+  item.className = 'item'; item.dataset.id = p.id;
+  item.innerHTML = '<div class="thumb">' + imagem(p, p.curto) + '</div><div><strong>' + p.curto + '</strong><span>' + p.tags.slice(0, 2).join(' · ') + '</span></div>';
+  item.onclick = () => { troca(p.id); if (innerWidth <= 1000) principal.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  lista.appendChild(item);
+  semImg(item.querySelector('.thumb'));
+});
+function troca(id) {
+  if (id === ativoId) return;
+  render(id, true);
+  history.replaceState(null, '', '#' + id);
+}
+const hash = location.hash.slice(1);
+render(PROJETOS.some(p => p.id === hash) ? hash : PROJETOS[0].id, false);
+
+/* ===================== LINKS ===================== */
+document.querySelectorAll('[data-link]').forEach(el => {
+  const k = el.dataset.link;
+  el.href = k === 'email' ? 'mailto:' + CONFIG.email : CONFIG[k];
+});
+</script>
+</body>
+</html>
